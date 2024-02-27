@@ -170,6 +170,10 @@
                         <label>Airbrake</label>
                         <class>FireGento_Logger_Model_Airbrake</class>
                     </airbrake>
+                    <stdout>
+                        <label>Standard Output</label>
+                        <class>Firegento_Logger_Model_Stdout</class>
+                    </stdout>
                 </writer_models>
             </core>
         </log>
