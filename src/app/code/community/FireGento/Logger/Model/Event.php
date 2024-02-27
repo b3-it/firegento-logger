@@ -77,11 +77,11 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
     /**
      * Append content to the message
      *
-     * @param  string $sMessage message to append.
+     * @param string $sMessage message to append.
      *
      * @return $this
      */
-    public function addMessage($sMessage)
+    public function addMessage(string $sMessage): static
     {
         return $this->setMessage($this->getMessage() . $sMessage . PHP_EOL);
     }
@@ -91,7 +91,7 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
      *
      * @return string
      */
-    public function getBacktrace()
+    public function getBacktrace(): string
     {
         if ($this->_getData('backtrace') === TRUE) {
             if ($this->getBacktraceArray()) {
@@ -143,7 +143,7 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
      *
      * @return array
      */
-    public function getEventDataArraySimple()
+    public function getEventDataArraySimple(): array
     {
         return array(
             'timestamp' => $this->getTimestamp(),
@@ -158,7 +158,7 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
      *
      * @return array
      */
-    public function getEventDataArray()
+    public function getEventDataArray(): array
     {
         return array(
             'timestamp' => $this->getTimestamp(),
@@ -183,24 +183,24 @@ class FireGento_Logger_Model_Event extends Varien_Object implements ArrayAccess
         );
     }
 
-    public function offsetSet($offset, $value) {
+    public function offsetSet($offset, $value):void {
         throw new Mage_Core_Exception('Log Event assignment not implemented');
     }
 
-    public function offsetExists($offset) {
+    public function offsetExists($offset):bool {
         $offset = $this->_underscore($offset);
         return isset($this->_data[$offset]);
     }
 
-    public function offsetUnset($offset) {
+    public function offsetUnset($offset):void {
         throw new Mage_Core_Exception('Log Event assignment not implemented');
     }
 
-    public function offsetGet($offset) {
+    public function offsetGet($offset):mixed {
         if ($offset == 'backtrace') {
             return $this->getBacktrace();
         }
         $offset = $this->_underscore($offset);
-        return isset($this->_data[$offset]) ? $this->_data[$offset] : null;
+        return $this->_data[$offset] ?? null;
     }
 }

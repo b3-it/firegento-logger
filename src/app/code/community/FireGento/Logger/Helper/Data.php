@@ -66,10 +66,10 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Get logger config value
      *
-     * @param  string $path Config Path
+     * @param string $path Config Path
      * @return string Config Value
      */
-    public function getLoggerConfig($path)
+    public function getLoggerConfig(string $path): string
     {
         // Do not use Mage::getStoreConfig so that logger may work when db config is not loaded
         return (string) Mage::getConfig()->getNode('default/logger/'.$path);
@@ -78,7 +78,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * @return array
      */
-    public function getAllTargets()
+    public function getAllTargets(): array
     {
         if ($this->_targets === NULL) {
             $this->_targets = explode(',', $this->getLoggerConfig('general/targets'));
@@ -90,10 +90,10 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      * Returns an array of targets mapped or null if there was an error or there is no map.
      * Keys are target codes, values are bool indicating if backtrace is enabled
      *
-     * @param  string $filename Filename
+     * @param string $filename Filename
      * @return null|array Mapped Targets
      */
-    public function getMappedTargets($filename)
+    public function getMappedTargets(string $filename): ?array
     {
         if ($this->_targetMap === null) {
             $targetMap = $this->getLoggerConfig('general/target_map');
@@ -123,7 +123,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return string Days to keep
      */
-    public function getMaxDaysToKeep()
+    public function getMaxDaysToKeep(): string
     {
         return $this->getLoggerConfig(self::XML_PATH_MAX_DAYS);
     }
@@ -132,9 +132,9 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      * Add priority filte to writer instance
      *
      * @param Zend_Log_Writer_Abstract $writer     Writer Instance
-     * @param null|string              $configPath Config Path
+     * @param string|null $configPath Config Path
      */
-    public function addPriorityFilter(Zend_Log_Writer_Abstract $writer, $configPath = null)
+    public function addPriorityFilter(Zend_Log_Writer_Abstract $writer, string $configPath = null)
     {
         $priority = null;
         if ($configPath) {
@@ -143,7 +143,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
                 $priority = null;
             }
         }
-        if ( ! $configPath || ! strlen($priority)) {
+        if ( ! $configPath || empty($priority)) {
             $priority = $this->getLoggerConfig(self::XML_PATH_PRIORITY);
         }
         if ($priority !== null) {
@@ -155,10 +155,10 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      * Add useful metadata to the event
      *
      * @param FireGento_Logger_Model_Event &$event          Event Data
-     * @param null|string                  $notAvailable    Not available
-     * @param bool                         $enableBacktrace Flag for Backtrace
+     * @param string|null $notAvailable    Not available
+     * @param bool $enableBacktrace Flag for Backtrace
      */
-    public function addEventMetadata(&$event, $notAvailable = null, $enableBacktrace = false)
+    public function addEventMetadata(FireGento_Logger_Model_Event &$event, string $notAvailable = null, bool $enableBacktrace = false)
     {
         $event->setBacktrace($enableBacktrace ? TRUE : $notAvailable);
 
@@ -220,7 +220,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
                         isset($frame['type'])
                         && $frame['type'] == '::'
                         && $frame['class'] == 'Mage'
-                        && substr($frame['function'], 0, 3) == 'log'
+                        && str_starts_with($frame['function'], 'log')
                     )
                 ) {
                     if (isset($frame['file']) && isset($frame['line'])) {
@@ -333,10 +333,10 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * filter sensible data like credit card and password from requests
      *
-     * @param  array $data the data to be filtered
+     * @param array $data the data to be filtered
      * @return array
      */
-    private function filterSensibleData($data)
+    private function filterSensibleData(array $data): array
     {
         if (is_array($data)) {
             foreach ($this->_keysToFilter as $key) {
@@ -357,7 +357,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      * @param  array $subkeys list of multidimensional keys
      * @return array
      */
-    private function filterDataFromMultidimensionalKey(array $data, array $subkeys)
+    private function filterDataFromMultidimensionalKey(array $data, array $subkeys): array
     {
         $countSubkeys = count($subkeys);
         $lastSubkey = ($countSubkeys - 1);
@@ -378,7 +378,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return array|mixed|null an array of rules
      */
-    public function getEmailNotificationRules()
+    public function getEmailNotificationRules(): mixed
     {
         if ($this->_notificationRules != null) {
             return $this->_notificationRules;
@@ -397,11 +397,11 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Convert Array to Event Object
      *
-     * @param  array $event Event
+     * @param array $event Event
      *
      * @return FireGento_Logger_Model_Event
      */
-    public function getEventObjectFromArray($event)
+    public function getEventObjectFromArray(array $event): FireGento_Logger_Model_Event
     {
         // if more than one logger is active the first logger convert the array
         if (is_object($event) && get_class($event) == get_class(Mage::getModel('firegento_logger/event'))) {
