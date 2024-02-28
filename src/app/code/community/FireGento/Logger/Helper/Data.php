@@ -132,7 +132,7 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
      * Add priority filte to writer instance
      *
      * @param Zend_Log_Writer_Abstract $writer     Writer Instance
-     * @param string|null $configPath Config Path
+     * @param              string|null $configPath Config Path
      */
     public function addPriorityFilter(Zend_Log_Writer_Abstract $writer, string $configPath = null)
     {
@@ -154,11 +154,11 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Add useful metadata to the event
      *
-     * @param FireGento_Logger_Model_Event &$event          Event Data
-     * @param string|null $notAvailable    Not available
-     * @param bool $enableBacktrace Flag for Backtrace
+     * @param array|FireGento_Logger_Model_Event &$event          Event Data
+     * @param                        string|null $notAvailable    Not available
+     * @param                               bool $enableBacktrace Flag for Backtrace
      */
-    public function addEventMetadata(FireGento_Logger_Model_Event &$event, string $notAvailable = null, bool $enableBacktrace = false)
+    public function addEventMetadata(array|FireGento_Logger_Model_Event &$event, string $notAvailable = null, bool $enableBacktrace = false)
     {
         $event->setBacktrace($enableBacktrace ? TRUE : $notAvailable);
 
@@ -397,11 +397,11 @@ class FireGento_Logger_Helper_Data extends Mage_Core_Helper_Abstract
     /**
      * Convert Array to Event Object
      *
-     * @param array $event Event
+     * @param array|FireGento_Logger_Model_Event $event Event
      *
      * @return FireGento_Logger_Model_Event
      */
-    public function getEventObjectFromArray(array $event): FireGento_Logger_Model_Event
+    public function getEventObjectFromArray(array|FireGento_Logger_Model_Event $event): FireGento_Logger_Model_Event
     {
         // if more than one logger is active the first logger convert the array
         if (is_object($event) && get_class($event) == get_class(Mage::getModel('firegento_logger/event'))) {
